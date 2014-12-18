@@ -1,0 +1,17 @@
+{
+  "name": "exd",
+  "version": "0.0.1",
+  "authors": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "snap.svg": "~0.3.0",
+    "jquery": "~2.1.2"
+  }
+}

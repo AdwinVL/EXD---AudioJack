@@ -1,0 +1,32 @@
+@import 'base';
+
+html,
+body {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+body {
+	background-color: #f0c377;
+
+	&.robotsim {
+		background-color: #0b486b;
+	}
+}
+
+// container
+.container {
+	height: 100%;
+	position: relative;
+}
+
+// checkbox
+input[type=checkbox] {
+	margin: 20px;
+}
+
+// range
+input[type=range] {
+	margin: 20px;
+}

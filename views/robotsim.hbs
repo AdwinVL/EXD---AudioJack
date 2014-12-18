@@ -1,0 +1,54 @@
+<h1>Robotsim</h1>
+
+<div>
+	<label for="buttonHeart">buttonHeart</label>
+	<input type="checkbox" value="buttonHeart" id="buttonHeart" name="buttonHeart" />
+	<label for="buttonA">buttonA</label>
+	<input type="checkbox" value="buttonA" id="buttonA" name="buttonA" />
+	<label for="buttonB">buttonB</label>
+	<input type="checkbox" value="buttonB" id="buttonB" name="buttonB" />
+	<label for="buttonTwist">buttonTwist</label>
+	<input type="checkbox" value="buttonTwist" id="buttonTwist" name="buttonTwist" />
+	<label for="buttonSpin">buttonSpin</label>
+	<input type="checkbox" value="buttonSpin" id="buttonSpin" name="buttonSpin" />
+	<label for="buttonPull">buttonPull</label>
+	<input type="checkbox" value="buttonPull" id="buttonPull" name="buttonPull" />
+	<label for="buttonFlick">buttonFlick</label>
+	<input type="checkbox" value="buttonFlick" id="buttonFlick" name="buttonFlick" />
+</div>
+
+<div>
+	<label>ledOne</label>
+	<input type="range" min="0" max="255" step="5" value="0" id="ledOneRed" />
+	<input type="checkbox" value="ledOneGreen" id="ledOneGreen" name="ledOneGreen" />
+	<input type="checkbox" value="ledOneBlue" id="ledOneBlue" name="ledOneBlue" />
+</div>
+<div>
+	<label>ledTwo</label>
+	<input type="range" min="0" max="255" step="5" value="0" id="ledTwoRed" />
+	<input type="checkbox" value="ledTwoGreen" id="ledTwoGreen" name="ledTwoGreen" />
+	<input type="checkbox" value="ledTwoBlue" id="ledTwoBlue" name="ledTwoBlue" />
+</div>
+<div>
+	<label>ledThree</label>
+	<input type="range" min="0" max="255" step="5" value="0" id="ledThreeRed" />
+	<input type="checkbox" value="ledThreeGreen" id="ledThreeGreen" name="ledThreeGreen" />
+	<input type="checkbox" value="ledThreeBlue" id="ledThreeBlue" name="ledThreeBlue" />
+</div>
+
+<div>
+	<label for="servoOne">servoOne</label>
+	<input type="range" min="0" max="180" step="5" value="90" id="servoOne" />
+	<label for="servoTwo">servoTwo</label>
+	<input type="range" min="0" max="180" step="5" value="90" id="servoTwo" />
+	<label for="servoThree">servoThree</label>
+	<input type="range" min="0" max="180" step="5" value="90" id="servoThree" />
+	<label for="servoFour">servoFour</label>
+	<input type="range" min="0" max="180" step="5" value="90" id="servoFour" />
+</div>
+
+{{#section "scripts"}}
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/js/vendor.js"></script>
+	<script src="/js/app-robotsim.js"></script>
+{{/section}}
