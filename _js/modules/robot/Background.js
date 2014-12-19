@@ -1,5 +1,5 @@
-var paper, objectPool, rectsQ, currentBgColor, currentFgColor, mySVG, svgWidth, svgHeight;
-
+var paper, objectPool, rectsQ, currentBgColor, currentFgColor, mySVG, svgWidth, svgHeight, robotImage, twist, flick, pull, btnA, btnB, head;
+var resolution,scaleFactor,robotHeight,topMargin,robotWidth,robotXpos;
 /** colors **/
 var darkBlue = '#0C2437';
 var mediumBlue = '#24425A';
@@ -8,6 +8,7 @@ var lighterBlue = '#749AA0';
 var yellow = '#F0C377';
 var mahogany = '#CC4133';
 var candy = '#D85261';
+currentBgColor = yellow;
 
 function Background(){
 	paper = new Snap('#svgboard');
@@ -19,12 +20,48 @@ function Background(){
 	mySVG.setAttribute("width",  svgWidth);
 	mySVG.setAttribute("height", svgHeight);
 
+
+	resolution = 664/1072;
+
 	window.addEventListener('resize', function(){
 		svgWidth = window.innerWidth;
 		svgHeight = window.innerHeight;
 		mySVG.setAttribute('width',  svgWidth);
 		mySVG.setAttribute('height', svgHeight);
 	});
+	window.addEventListener('webkitfullscreenchange', function() {
+		svgWidth = window.innerWidth;
+		svgHeight = window.innerHeight;
+		mySVG.setAttribute('width',  svgWidth);
+		mySVG.setAttribute('height', svgHeight);
+		console.log('vnklcskls');
+
+		objectPool.rectZ1.attr({'height': svgHeight+1000});
+		objectPool.rectZ2.attr({'height': svgHeight+1000});
+		objectPool.rectD1.attr({'height': svgHeight+1000});
+		objectPool.rectD2.attr({'height': svgHeight+1000});
+		objectPool.rectD3.attr({'height': svgHeight+1000});
+
+		objectPool.rectQ1.attr({'height': svgHeight+1000});
+		objectPool.rectQ2.attr({'height': svgHeight+1000});
+		objectPool.rectQ3.attr({'height': svgHeight+1000});
+		objectPool.rectQ4.attr({'height': svgHeight+1000});
+		objectPool.rectQ5.attr({'height': svgHeight+1000});
+		objectPool.rectQ6.attr({'height': svgHeight+1000});
+	});
+	scaleFactor = svgHeight/1000;
+	robotHeight = svgHeight;
+	topMargin = -288 + (scaleFactor*robotHeight);
+	robotWidth = robotHeight*resolution;
+	robotXpos = svgWidth/2 -(robotWidth/2);
+	robotImage = Snap.select('#robotImage');
+	btnA = robotImage.select('#robotBtnA');
+	btnB = robotImage.select('#robotBtnB');
+	robotImage.attr({transform:'s'+ scaleFactor +' T' + robotXpos + ' ' + (topMargin-100)});
+	btnA.attr({opacity:0});
+	btnB.attr({opacity:0});
+
+	$('#container').css({width: svgWidth + 'px'});
 
 	/** objectpool **/
 	objectPool = {
@@ -62,8 +99,10 @@ function Background(){
 		objectPool.rectQ6
 	];
 }
-
 Background.prototype.animationA = function(){
+
+	twist = robotImage.select('#robotSpin');
+	twist.animate({'transform':'s1.3 0 0 r1000 25 50'}, 500, function(){twist.animate({'transform':'s1 0 0 r0 0 0'}, 300);});
 	if(currentBgColor !== darkBlue && currentBgColor !== yellow){
 		doubleCircle(
 			darkBlue,
@@ -98,15 +137,19 @@ Background.prototype.animationA = function(){
 
 		function animateCircle(color, obj){
 			paper.node.appendChild(obj.node);
+			paper.node.appendChild(robotImage.node);
 			obj.attr({fill:color,r:0,opacity:1});
 			obj.animate({'r': 1000}, 500, mina.easein);
 		}
 	}
 };
-
 Background.prototype.animationD = function(){
 
+	flick = robotImage.select('#robotFlick');
+	flick.animate({'transform':'s1.1 0 0 r-5 310 515'}, 100, function(){flick.animate({'transform':'s1 0 0 r0 0 0'}, 70);});
+
 	paper.node.appendChild(objectPool.rectD1.node); // toFront() van Raphael immiteren.
+	paper.node.appendChild(robotImage.node);
 	objectPool.rectD1.attr({fill:lightBlue, width:svgWidth-(svgWidth/5),height:150});
 
 	var visible = true;
@@ -135,11 +178,13 @@ Background.prototype.animationD = function(){
 				if(currentBgColor !== mahogany){
 					currentBgColor = mahogany;
 					paper.node.appendChild(objectPool.rectD2.node); // toFront() van Raphael immiteren.
+					paper.node.appendChild(robotImage.node);
 					objectPool.rectD2.transform('T'+svgWidth+' 0');
 					objectPool.rectD2.animate({ transform: 't'+ -svgWidth+ ' 0'}, 400, mina.easein);
 				}else{
 					currentBgColor = yellow;
 					paper.node.appendChild(objectPool.rectD3.node); // toFront() van Raphael immiteren.
+					paper.node.appendChild(robotImage.node);
 					objectPool.rectD3.transform('T'+svgWidth+' 0');
 					objectPool.rectD3.animate({ transform: 't'+ -svgWidth+ ' 0'}, 400, mina.easein);
 				}
@@ -149,6 +194,8 @@ Background.prototype.animationD = function(){
 };
 
 Background.prototype.animationE = function(){
+	btnA = robotImage.select('#robotBtnA');
+	btnA.animate({'opacity':1}, 200, function(){btnA.animate({'opacity':0}, 100);});
 	if(currentBgColor !== candy){
 		objectPool.rectE1.attr({fill:candy,height:0});
 		objectPool.rectE2.attr({fill:candy,height:0});
@@ -166,8 +213,15 @@ Background.prototype.animationE = function(){
 	window.setTimeout(function(){rects.animate({transform:"t0 " + svgHeight}, 200, mina.easeout, this.removeHandler);}, 300);
 	currentFgColor = candy;
 };
-
+Background.prototype.animationHead = function(){
+	head = robotImage.select('#robotHead');
+	head.animate({'transform':'t0 20'}, 100, function(){head.animate({'transform':'t0 0'}, 70);});
+}
 Background.prototype.animationQ = function(){
+
+	head = robotImage.select('#robotHead');
+	head.animate({'transform':'t0 20'}, 100, function(){head.animate({'transform':'t0 0'}, 70);});
+
 	var rectAmount = 6;
 	var rectWidth = 100;
 	currentFgColor = null;
@@ -186,6 +240,7 @@ Background.prototype.animationQ = function(){
 
 	for(var i=0;i<rectAmount;i++){
 		paper.node.appendChild(rectsQ[i].node);
+		paper.node.appendChild(robotImage.node);
 		rectsQ[i].attr({fill:currentFgColor, width:rectWidth, opacity:1});
 		rectsQ[i].transform('t' + (svgWidth-(rectWidth*(i+1))) + ' 0');
 	}
@@ -212,9 +267,14 @@ Background.prototype.animationQ = function(){
 };
 
 Background.prototype.animationS = function(){
+
+	pull = robotImage.select('#robotPull');
+	pull.animate({'transform':'t40 0'}, 100, function(){pull.animate({'transform':'t-40 0'}, 70);});
+
 	if(currentBgColor !== mediumBlue && currentFgColor !== mediumBlue){
 		currentFgColor = mediumBlue;
 		paper.node.appendChild(objectPool.rectS1.node); // toFront() van Raphael immiteren.
+		paper.node.appendChild(robotImage.node);
 		objectPool.rectS1.attr({fill:mediumBlue, width:svgWidth+600, height:svgHeight+400,opacity: 1});
 		objectPool.rectS1.transform('r-20,'+svgWidth/2+','+svgHeight/2);
 		objectPool.rectS1.animate({ transform: 'r30,'+svgWidth/2+','+svgHeight/2 }, 1000, mina.bounce );
@@ -222,6 +282,7 @@ Background.prototype.animationS = function(){
 	else if(currentBgColor !== candy && currentFgColor !== candy){
 		currentFgColor = candy;
 		paper.node.appendChild(objectPool.rectS2.node); // toFront() van Raphael immiteren.
+		paper.node.appendChild(robotImage.node);
 		objectPool.rectS2.attr({fill:candy, width:svgWidth+600, height:svgHeight+400,opacity: 1});
 		objectPool.rectS2.transform('r-20,'+svgWidth/2+','+svgHeight/2);
 		objectPool.rectS2.animate({ transform: 'r30,'+svgWidth/2+','+svgHeight/2 }, 1000, mina.bounce );
@@ -229,7 +290,8 @@ Background.prototype.animationS = function(){
 	window.setTimeout(function balls(){
 		paper.node.appendChild(objectPool.circleS1.node); // toFront() van Raphael immiteren.
 		paper.node.appendChild(objectPool.circleS2.node); // toFront() van Raphael immiteren.
-		objectPool.circleS1.transform("T20 " + svgHeight/4).attr({opacity:1});
+		paper.node.appendChild(robotImage.node);
+		objectPool.circleS1.transform("T20 " + svgHeight).attr({opacity:1});
 		objectPool.circleS2.transform("T" + svgWidth-20 + " 0").attr({opacity:1});
 		objectPool.circleS1.animate({transform:'t0 -'+svgHeight}, 500, mina.easein, function(){this.attr({opacity:0, width:0});});
 		objectPool.circleS2.animate({transform:'t0 '+svgHeight}, 500, mina.easein, function(){this.attr({opacity:0, width:0});});
@@ -238,9 +300,12 @@ Background.prototype.animationS = function(){
 
 
 Background.prototype.animationZ = function(){
+	btnB.animate({'opacity':1}, 200, function(){btnB.animate({'opacity':0}, 100);});
+
 	if(currentBgColor !== yellow){
 		currentBgColor = yellow;
 		paper.node.appendChild(objectPool.rectZ1.node); // toFront() van Raphael immiteren.
+		paper.node.appendChild(robotImage.node);
 		objectPool.rectZ1.transform('T0 0').attr({width:0});
 		objectPool.rectZ1.attr({fill:yellow});
 		objectPool.rectZ1.animate({width: svgWidth}, 400, mina.easein);
@@ -248,6 +313,7 @@ Background.prototype.animationZ = function(){
 	else{
 		currentBgColor = lighterBlue;
 		paper.node.appendChild(objectPool.rectZ2.node); // toFront() van Raphael immiteren.
+		paper.node.appendChild(robotImage.node);
 		objectPool.rectZ2.transform('T0 0').attr({width:0});
 		objectPool.rectZ2.attr({fill:lighterBlue});
 		objectPool.rectZ2.animate({width: svgWidth}, 400, mina.easein);
